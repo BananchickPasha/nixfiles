@@ -5,7 +5,7 @@ let vimCommon =
           colo gruvbox
           set number
           set termguicolors
-          set clipboard=unnamed
+          set clipboard=unnamedplus
           syntax on
           set background=dark
           set hlsearch
@@ -22,6 +22,10 @@ let vimCommon =
           inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
           set completeopt=noinsert,menuone,noselect
           autocmd BufEnter  *  call ncm2#enable_for_buffer()
+
+          map <C-q> :GFiles<CR>
+          map <C-c> :Commits<CR>
+          map <C-l> :Lines<CR>
         '';
         packages.myVimPackage = with pkgs.vimPlugins; {
           start = [
@@ -41,7 +45,6 @@ let vimCommon =
       overrider = pkgs.neovim.override;
       defaultPackages = vimCommon.packages.myVimPackage.start;
       hieWrapper = pkgs.writers.writeBash "hie" "${hie}/bin/hie +RTS -c -M1500M -K1G -A16M -RTS --lsp $@";
-      lspxml = pkgs.writers.writeBash "lspxml" "${pkgs.openjdk}/bin/java -jar /home/banan/scripts/PATH/org.eclipse.lsp4xml-0.3.0-uber.jar";
 in
 rec {
     default = overrider {
@@ -66,9 +69,9 @@ rec {
                 \ 'haskell': ['${hieWrapper}'],
                 \ 'cpp': ['${pkgs.cquery}/bin/cquery'],
                 \ 'c': ['${pkgs.cquery}/bin/cquery'],
-                \ 'xml': ['/home/banan/scripts/PATH/lspxml.sh'],
-                \ 'xsd': ['/home/banan/scripts/PATH/lspxml.sh'],
-                \ 'dtd': ['/home/banan/scripts/PATH/lspxml.sh']
+                \ 'xml': ['/etc/nixos/sources/lspxml/lspxml.sh'],
+                \ 'xsd': ['/etc/nixos/sources/lspxml/lspxml.sh'],
+                \ 'dtd': ['/etc/nixos/sources/lspxml/lspxml.sh'],
                 \}
           '';
           packages.myVimPackage.start = with pkgs.vimPlugins; [
@@ -83,23 +86,17 @@ rec {
             ] ++ defaultPackages;
           };
         };
-    coc = overrider {
+    term = overrider {
         withRuby = false;
         withPython = false;
-        withPython3 = true;
+        withPython3 = false;
         configure = vimCommon // {
           customRC = ''
-            source /home/banan/.cocrc
-            '' + vimCommon.customRC + ''
-          '';
-          packages.myVimPackage.start = with pkgs.vimPlugins; [
-              ncm2
-              echodoc-vim
-              nerdtree
-              fzfWrapper
-              #vim-gitgutter
-              haskell-vim
-            ] ++ defaultPackages;
+              set nonumber
+              set laststatus=1
+              set noshowmode
+            '';
+          packages.myVimPackage.start = [];
           };
         };
     }

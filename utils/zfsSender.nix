@@ -1,6 +1,6 @@
 {config, pkgs, lib, ...}:
 let wrapScriptFunc = pkgs.helpers.scriptWriter;
-    zfsSenderScript = wrapScriptFunc ./zfsSenderScript.sh [pkgs.zfs];
+    zfsSenderScript = wrapScriptFunc /etc/nixos/sources/zfsSender/zfsSenderScript.sh [pkgs.zfs];
     cfg = config.services.zfsSendSnapshots;
 in
 

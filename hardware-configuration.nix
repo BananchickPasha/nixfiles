@@ -12,7 +12,6 @@
   boot.supportedFilesystems = [ "zfs" ];
   boot.kernelModules = [ "kvm-intel" ];
 
-  boot.kernelParams = ["root=ZFS=system/root"];
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.enable = true;
 

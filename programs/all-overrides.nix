@@ -5,29 +5,26 @@ in rec {
     st = 
       pkgs.st.overrideAttrs (oldAttrs: {
         name = "pahan-st";
-        src = /home/banan/MySourceProgramms/st-0.8.2;
+        src = /etc/nixos/sources/st-0.8.2;
       });
     pmenu =
       pkgs.dmenu.overrideAttrs (oldAttrs: {
         name = "pahan-dmenu";
-        src = /home/banan/MySourceProgramms/dmenu-4.9;
+        src = /etc/nixos/sources/dmenu-4.9;
       });
     dmenu =
       pkgs.dmenu.overrideAttrs (oldAttrs: {
         name = "pahan-dmenu";
-        src = /home/banan/MySourceProgramms/dmenu-def/dmenu-4.9;
+        src = /etc/nixos/sources/dmenu-def/dmenu-4.9;
       });
     code = pkgs.vscodium.overrideDerivation (old: {
       postFixup = ''
         wrapProgram $out/bin/codium --prefix PATH : ${lib.makeBinPath [hie.hies]}
       '';
     });
-    #code = import ./vscode.nix;
-    dotnet = callPackage /home/banan/NixOsChannel/dotnet/dotnet.nix {};
-    #zsh = callPackage /home/banan/NixOsChannel/athame/zsh.nix {vim = vims.default; isNeovim = true;};
-    zsh = callPackage /home/banan/NixOsChannel/athame/zsh.nix {};
+    dotnet = callPackage ./dotnet.nix {};
     pmenuAlias = alias "${pmenu}/bin/dmenu" "pmenu";
-    ranger-killer = callPackage ./fzffm/fzffm.nix {neovim = vims.default;};
+    ranger-killer = callPackage ./fzffm.nix {neovim = vims.default;};
     kak = with pkgs.unstable; let masterKak = kakoune-unwrapped.overrideAttrs ( oldAttrs:
     {
  src = fetchGit {
@@ -57,8 +54,8 @@ in rec {
           libav
         ];
       });
-    vims = import ./vim.nix {inherit pkgs; hie = pkgs.hie.hies;};
-    viAlias    = alias "${vims.default}/bin/nvim" "vi";
-    videAlias  = alias "${vims.vide}/bin/nvim"    "vide";
-    cocAlias   = alias "${vims.coc}/bin/nvim"    "coc";
+    vims = import ./vim.nix {pkgs = pkgs.unstable; hie = pkgs.hie.hies;};
+    viAlias   = alias "${vims.default}/bin/nvim" "vi";
+    videAlias = alias "${vims.vide}/bin/nvim"  "vide";
+    termAlias = alias "${vims.term}/bin/nvim"  "term";
     }

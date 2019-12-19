@@ -11,10 +11,10 @@ in
   imports =
     [
       ./hardware-configuration.nix
-      ./Utils/xserver.nix
-      #./Utils/nextcloud.nix
-      ./Utils/wireguard.nix
-      ./Utils/zfsSender.nix
+      ./utils/xserver.nix
+      #./utils/nextcloud.nix
+      ./utils/wireguard.nix
+      ./utils/zfsSender.nix
     ];
 
   hardware = {
@@ -102,7 +102,7 @@ in
     permitRootLogin = "no";
     passwordAuthentication = false;
     ports = [ 22832 ];
-    authorizedKeysFiles = [ "/home/banan/.nixos-configuration/keys/ssh/authorized_keys" ];
+    authorizedKeysFiles = [ "/etc/nixos/keys/ssh/authorized_keys" ];
   };
 
   time.timeZone = "Europe/Kiev";
@@ -130,8 +130,8 @@ in
       haskellEnv = pkgs.haskellPackages.ghcWithHoogle
                        (haskellPackages: with haskellPackages; [
                        ]);
-      my = import ./Programs/all-overrides.nix {pkgs = overrided;};
-      helpers = import ./Utils/helpers/helpers.nix;
+      my = import ./programs/all-overrides.nix {pkgs = overrided;};
+      helpers = import ./utils/helpers/helpers.nix;
       hie.hies = (hie.selection { selector = p: { inherit (p) ghc865 ; }; });
       #hie.hies = (hie.bios.selection { selector = p: { inherit (p) ghc865 ; }; });
     };
@@ -143,6 +143,7 @@ in
     dmenu
     videAlias
     viAlias
+    termAlias
     ranger-killer
     code
     dotnet
