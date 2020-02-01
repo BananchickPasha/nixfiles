@@ -1,6 +1,7 @@
 {config, pkgs, lib, ...}:
 let wrapScriptFunc = pkgs.helpers.scriptWriter;
-    zfsSenderScript = wrapScriptFunc /etc/nixos/sources/zfsSender/zfsSenderScript.sh [pkgs.zfs];
+    zfsNoSync = wrapScriptFunc /etc/nixos/sources/zfsSender/zfsNoSync.sh [pkgs.zfs];
+    zfsSync = wrapScriptFunc /etc/nixos/sources/zfsSender/zfsSync.sh [pkgs.zfs];
     cfg = config.services.zfsSendSnapshots;
 in
 
@@ -9,7 +10,7 @@ in
     services.zfsSendSnapshots = {
       sendFromToPairs = mkOption {
          default = [];
-         example = [ {from = "system/home"; to = "hdd/backups/home";} {from = "system/root"; to = "hdd/backups/root";}];
+         example = [ {from = "system/home"; to = "hdd/backups/home";} {from = "system/root"; to = "hdd/backups/root"; sync = false;}];
 
          type = types.listOf types.attrs;
          description = ''
@@ -39,7 +40,8 @@ in
         serviceConfig = {
           Type = "oneshot";
           User = "root";
-          ExecStart = "${zfsSenderScript}/zfsSenderScript.sh ${pair.from} ${pair.to}";
+          ExecStart = if pair.sync then  "${zfsSync}/zfsSync.sh ${pair.from} ${pair.to}" 
+          else "${zfsNoSync}/zfsNoSync.sh ${pair.from} ${pair.to}";
         };
       };
     }) cfg.sendFromToPairs);

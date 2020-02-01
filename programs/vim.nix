@@ -99,4 +99,12 @@ rec {
           packages.myVimPackage.start = [];
           };
         };
+    justvim = overrider {
+        withRuby = false;
+        withPython = false;
+        withPython3 = false;
+        configure = {
+          customRC = "";
+          };
+        };
     }

@@ -15,12 +15,13 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.enable = true;
 
+  hardware.opengl.extraPackages = with pkgs; [ vaapiIntel ];
   boot.tmpOnTmpfs = true;
   services.zfs.autoScrub.enable = true;
   boot.zfs.enableUnstable = true;
   services.zfs.autoSnapshot = {
     enable = true;
-    frequent = 8; # keep the latest eight 15-minute snapshots (instead of four)
+    frequent = 4; # keep the latest eight 15-minute snapshots (instead of four)
     monthly = 12;  # keep only one monthly snapshot (instead of twelve)
   };
 

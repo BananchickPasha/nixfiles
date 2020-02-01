@@ -17,11 +17,18 @@ in rec {
         name = "pahan-dmenu";
         src = /etc/nixos/sources/dmenu-def/dmenu-4.9;
       });
-    code = pkgs.vscodium.overrideDerivation (old: {
+    code = pkgs.unstable.vscodium.overrideDerivation (old: {
       postFixup = ''
         wrapProgram $out/bin/codium --prefix PATH : ${lib.makeBinPath [hie.hies]}
       '';
     });
+    codeWithPackages = pkgs.buildFHSUserEnv {
+      name = "vscodium";
+      targetPkgs = pkgs: [];
+      multiPkgs = pkgs: [code icu];
+      runScript = "codium";
+    };
+    emacs = callPackage ./emacs.nix {};
     dotnet = callPackage ./dotnet.nix {};
     pmenuAlias = alias "${pmenu}/bin/dmenu" "pmenu";
     ranger-killer = callPackage ./fzffm.nix {neovim = vims.default;};
@@ -58,4 +65,5 @@ in rec {
     viAlias   = alias "${vims.default}/bin/nvim" "vi";
     videAlias = alias "${vims.vide}/bin/nvim"  "vide";
     termAlias = alias "${vims.term}/bin/nvim"  "term";
+    neovim    = alias "${vims.justvim}/bin/nvim""jvim";
     }

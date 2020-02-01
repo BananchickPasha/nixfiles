@@ -27,16 +27,16 @@ in
   services.flatpak.enable = true;
   xdg.portal.enable = true;
   services.timesyncd.enable = false;
-  services.zfsSendSnapshots.sendFromToPairs = [
-    {from = "system/home"; to = "shit/backups/home"; }
-    {from = "system/root"; to = "shit/backups/root"; }
-  ];
+#  services.zfsSendSnapshots.sendFromToPairs = [
+#    {from = "system/home"; to = "shit/backups/home"; sync = false; }
+#  ];
 
   networking.firewall = 
-  let nfsPorts = [111 1039 1047 1048 2049]; 
+  let nfsPorts = [111 1039 1047 1048 2049 3000]; 
+      minecraft = 37131;
   in {
-    allowedTCPPorts = [60990 22832 80 443 25565] ++ nfsPorts;
-    allowedUDPPorts = [60990 22832 25565 443] ++ nfsPorts;
+    allowedTCPPorts = [60990 22832 80 443 25565 minecraft] ++ nfsPorts;
+    allowedUDPPorts = [60990 22832 25565 443 minecraft] ++ nfsPorts;
   };
 
 
@@ -132,8 +132,8 @@ in
                        ]);
       my = import ./programs/all-overrides.nix {pkgs = overrided;};
       helpers = import ./utils/helpers/helpers.nix;
+      #hie.hies = (hie.selection { selector = p: { inherit (p) ghc865 ; }; });
       hie.hies = (hie.selection { selector = p: { inherit (p) ghc865 ; }; });
-      #hie.hies = (hie.bios.selection { selector = p: { inherit (p) ghc865 ; }; });
     };
   };
   environment.systemPackages = with pkgs.my;
@@ -144,9 +144,11 @@ in
     videAlias
     viAlias
     termAlias
+    neovim
     ranger-killer
-    code
+    codeWithPackages
     dotnet
+    emacs
     #kak
 	]
 	++
@@ -164,7 +166,7 @@ in
     xclip
     maim
     qbittorrent
-    vlc
+    #vlc
     krita
     feh
     numix-gtk-theme
