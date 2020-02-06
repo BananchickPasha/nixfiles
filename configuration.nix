@@ -147,7 +147,6 @@ in
     neovim
     ranger-killer
     codeWithPackages
-    dotnet
     emacs
     #kak
 	]

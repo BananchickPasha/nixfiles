@@ -29,7 +29,6 @@ in rec {
       runScript = "codium";
     };
     emacs = callPackage ./emacs.nix {};
-    dotnet = callPackage ./dotnet.nix {};
     pmenuAlias = alias "${pmenu}/bin/dmenu" "pmenu";
     ranger-killer = callPackage ./fzffm.nix {neovim = vims.default;};
     kak = with pkgs.unstable; let masterKak = kakoune-unwrapped.overrideAttrs ( oldAttrs:
