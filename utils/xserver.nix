@@ -15,7 +15,7 @@
     services.xserver = {
      enable = true;
      synaptics.enable = true;
-     #videoDrivers = ["nouveau"];
+     #videoDrivers = ["nvidiaLegacy390"];
      displayManager.startx.enable = true;
      windowManager.xmonad = {
        enable = true;

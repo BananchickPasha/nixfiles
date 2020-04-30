@@ -24,12 +24,10 @@ in
   };
 
   
-  services.flatpak.enable = true;
+  networking.networkmanager.enable = true;
+  services.flatpak.enable = false;
   xdg.portal.enable = true;
   services.timesyncd.enable = false;
-#  services.zfsSendSnapshots.sendFromToPairs = [
-#    {from = "system/home"; to = "shit/backups/home"; sync = false; }
-#  ];
 
   networking.firewall = 
   let nfsPorts = [111 1039 1047 1048 2049 3000]; 
@@ -79,9 +77,11 @@ in
     binaryCaches = lib.mkForce [
       "https://cache.nixos.org/"
       "https://all-hies.cachix.org/"
+      "https://hydra.iohk.io"
     ];
     binaryCachePublicKeys = [
       "all-hies.cachix.org-1:JjrzAOEUsD9ZMt8fdFbzo3jNAyEWlPAwdVuHw4RD43k="
+      "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
     ];
     trustedUsers = [ "root" "banan" ];
   };
@@ -95,7 +95,7 @@ in
   */
   
   networking.hostName = "nixosPasha"; # Define your hostname.
-  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.hostId = "b214b35a";
   services.sshd.enable = true;
   services.openssh = {
@@ -107,7 +107,7 @@ in
 
   time.timeZone = "Europe/Kiev";
 
-
+  programs.fuse.userAllowOther = true;
   fonts = rec {
     fonts = with pkgs; [
       dejavu_fonts
@@ -127,15 +127,12 @@ in
       unstable = import <unstable> {
         config = config.nixpkgs.config;
       };
-      haskellEnv = pkgs.haskellPackages.ghcWithHoogle
-                       (haskellPackages: with haskellPackages; [
-                       ]);
       my = import ./programs/all-overrides.nix {pkgs = overrided;};
       helpers = import ./utils/helpers/helpers.nix;
-      #hie.hies = (hie.selection { selector = p: { inherit (p) ghc865 ; }; });
       hie.hies = (hie.selection { selector = p: { inherit (p) ghc865 ; }; });
     };
   };
+  environment.pathsToLink = [ "/share/agda" ];
   environment.systemPackages = with pkgs.my;
   [
 		st
@@ -146,65 +143,52 @@ in
     termAlias
     neovim
     ranger-killer
-    codeWithPackages
+    #codeWithPackages
     emacs
     #kak
 	]
 	++
   (with pkgs;
 	[
+    agdaPrelude
+    ghc
+    mpv
+    dzen2
     cquery
     pkgs.hie.hies
-    haskellEnv
     neofetch 
     wget 
     firefox
-    unstable.mono
     unstable.tdesktop
-    #unstable.kakoune
     xclip
     maim
     qbittorrent
-    #vlc
     krita
     feh
     numix-gtk-theme
     arc-icon-theme
     gnome3.adwaita-icon-theme
-    ranger
     unzip
-    stow
     cmus
     git
     fzf
     killall
     htop
+    unstable.ytop
     sxhkd
     moreutils
     xdotool
+    zip
   ]);
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # Enable touchpad support.
-  # services.xserver.libinput.enable = true;
+  #hardware.opengl.driSupport32Bit = true;
+  #hardware.opengl.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
+  #hardware.pulseaudio.support32Bit = true;
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "19.09"; # Did you read the comment?
+  system.stateVersion = "20.03"; # Did you read the comment?
 
 }

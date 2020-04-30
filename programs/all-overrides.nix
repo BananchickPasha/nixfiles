@@ -25,7 +25,7 @@ in rec {
     codeWithPackages = pkgs.buildFHSUserEnv {
       name = "vscodium";
       targetPkgs = pkgs: [];
-      multiPkgs = pkgs: [code icu];
+      multiPkgs = pkgs: [code icu openssl];
       runScript = "codium";
     };
     emacs = callPackage ./emacs.nix {};
@@ -60,7 +60,7 @@ in rec {
           libav
         ];
       });
-    vims = import ./vim.nix {pkgs = pkgs.unstable; hie = pkgs.hie.hies;};
+    vims = import ./vim.nix {pkgs = pkgs; hie = pkgs.hie.hies;};
     viAlias   = alias "${vims.default}/bin/nvim" "vi";
     videAlias = alias "${vims.vide}/bin/nvim"  "vide";
     termAlias = alias "${vims.term}/bin/nvim"  "term";

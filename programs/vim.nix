@@ -44,7 +44,7 @@ let vimCommon =
       };
       overrider = pkgs.neovim.override;
       defaultPackages = vimCommon.packages.myVimPackage.start;
-      hieWrapper = pkgs.writers.writeBash "hie" "${hie}/bin/hie +RTS -c -M1500M -K1G -A16M -RTS --lsp $@";
+      #hieWrapper = pkgs.writers.writeBash "hie" "${hie}/bin/hie +RTS -c -M1500M -K1G -A16M -RTS --lsp $@";
 in
 rec {
     default = overrider {
@@ -66,9 +66,10 @@ rec {
             source /home/banan/.vimrc
             '' + vimCommon.customRC + ''
             let g:LanguageClient_serverCommands = { 
-                \ 'haskell': ['${hieWrapper}'],
+                \ 'haskell': ['${hie}/bin/hie'],
                 \ 'cpp': ['${pkgs.cquery}/bin/cquery'],
                 \ 'c': ['${pkgs.cquery}/bin/cquery'],
+                \ 'rust': ['${pkgs.rustup}/bin/rls'],
                 \ 'xml': ['/etc/nixos/sources/lspxml/lspxml.sh'],
                 \ 'xsd': ['/etc/nixos/sources/lspxml/lspxml.sh'],
                 \ 'dtd': ['/etc/nixos/sources/lspxml/lspxml.sh'],

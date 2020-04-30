@@ -18,6 +18,7 @@
   hardware.opengl.extraPackages = with pkgs; [ vaapiIntel ];
   boot.tmpOnTmpfs = true;
   services.zfs.autoScrub.enable = true;
+  services.zfs.trim.enable = true;
   boot.zfs.enableUnstable = true;
   services.zfs.autoSnapshot = {
     enable = true;
@@ -26,6 +27,11 @@
   };
 
 
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    swapDevices = 1;
+  };
   fileSystems."/" =
     { device = "system/root";
       fsType = "zfs";
@@ -46,6 +52,10 @@
 
   fileSystems."/LocalDiskF" =
     { device = "shit/shit";
+      fsType = "zfs";
+    };
+  fileSystems."/cache" =
+    { device = "system/cache";
       fsType = "zfs";
     };
 
