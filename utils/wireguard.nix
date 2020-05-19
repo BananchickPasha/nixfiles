@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-{
+{ config, pkgs, ... }: {
   networking.nat.enable = true;
   networking.nat.externalInterface = "wlp3s0";
   networking.nat.internalInterfaces = [ "wg0" ];

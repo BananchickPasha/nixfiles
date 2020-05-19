@@ -4,11 +4,17 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports =
-    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-    ];
+  imports = [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix> ];
 
-  boot.initrd.availableKernelModules = [ "ahci" "firewire_ohci" "usb_storage" "usbhid" "usb_uhci" "usb_ohci" "sdhci_pci" ];
+  boot.initrd.availableKernelModules = [
+    "ahci"
+    "firewire_ohci"
+    "usb_storage"
+    "usbhid"
+    "usb_uhci"
+    "usb_ohci"
+    "sdhci_pci"
+  ];
   boot.supportedFilesystems = [ "zfs" ];
   boot.kernelModules = [ "kvm-intel" ];
 
@@ -23,51 +29,48 @@
   services.zfs.autoSnapshot = {
     enable = true;
     frequent = 4; # keep the latest eight 15-minute snapshots (instead of four)
-    monthly = 12;  # keep only one monthly snapshot (instead of twelve)
+    monthly = 12; # keep only one monthly snapshot (instead of twelve)
   };
-
 
   zramSwap = {
     enable = true;
     algorithm = "zstd";
     swapDevices = 1;
   };
-  fileSystems."/" =
-    { device = "system/root";
-      fsType = "zfs";
-    };
-  fileSystems."/nix" =
-    { device = "system/nix";
-      fsType = "zfs";
-    };
-  fileSystems."/etc/nixos" =
-    { device = "system/root/nixos";
-      fsType = "zfs";
-    };
+  fileSystems."/" = {
+    device = "system/root";
+    fsType = "zfs";
+  };
+  fileSystems."/nix" = {
+    device = "system/nix";
+    fsType = "zfs";
+  };
+  fileSystems."/etc/nixos" = {
+    device = "system/root/nixos";
+    fsType = "zfs";
+  };
 
-  fileSystems."/home" =
-    { device = "system/home";
-      fsType = "zfs";
-    };
+  fileSystems."/home" = {
+    device = "system/home";
+    fsType = "zfs";
+  };
 
-  fileSystems."/LocalDiskF" =
-    { device = "shit/shit";
-      fsType = "zfs";
-    };
-  fileSystems."/cache" =
-    { device = "system/cache";
-      fsType = "zfs";
-    };
+  fileSystems."/LocalDiskF" = {
+    device = "shit/shit";
+    fsType = "zfs";
+  };
+  fileSystems."/cache" = {
+    device = "system/cache";
+    fsType = "zfs";
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/sda1";
-      fsType = "vfat";
-    };
-
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-id/ata-GOODRAM_A45A0775118600020829-part1";
+    fsType = "vfat";
+  };
 
   swapDevices =
-    [ { device = "/dev/disk/by-id/ata-GOODRAM_A45A0775118600020829-part2"; }
-    ];
+    [{ device = "/dev/disk/by-id/ata-GOODRAM_A45A0775118600020829-part2"; }];
 
   nix.maxJobs = lib.mkDefault 4;
 }

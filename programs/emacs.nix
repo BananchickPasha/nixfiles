@@ -1,10 +1,7 @@
-{ pkgs1 ? import <unstable> {} }:
+{ pkgs1 ? import <unstable> { } }:
 
 let
-  pkgs = import <unstable> {};
+  pkgs = import <unstable> { };
   myEmacs = pkgs.emacs;
   emacsWithPackages = (pkgs.emacsPackagesGen myEmacs).emacsWithPackages;
-in
-  emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
-    vterm
-  ]))
+in emacsWithPackages (epkgs: (with epkgs.melpaPackages; [ vterm ]))
