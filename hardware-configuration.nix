@@ -72,5 +72,5 @@
   swapDevices =
     [{ device = "/dev/disk/by-id/ata-GOODRAM_A45A0775118600020829-part2"; }];
 
-  nix.maxJobs = lib.mkDefault 4;
+  nix.maxJobs = lib.mkDefault 2;
 }

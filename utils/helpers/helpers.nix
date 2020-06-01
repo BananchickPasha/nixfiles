@@ -21,4 +21,14 @@ in rec {
       mkdir -p $out/bin
       ln -s ${from} $out/bin/${to}
     '';
+  aliasPath = from: to: packages:
+    pkgs.runCommand to { } ''
+      mkdir -p $out/bin
+      cat > $out/bin/${to} <<EOF
+      #!${pkgs.bash}/bin/bash
+      ${path packages}:/run/current-system/sw/bin:$(echo '$PATH')
+      ${from} "$(echo '$@')"
+      EOF
+      chmod +x $out/bin/${to}
+    '';
 }

@@ -1,6 +1,8 @@
 { pkgs, ... }:
 with pkgs;
-let alias = helpers.alias;
+let
+  alias = helpers.alias;
+  aliasPath = helpers.aliasPath;
 in rec {
   st = pkgs.st.overrideAttrs (oldAttrs: {
     name = "pahan-st";
@@ -62,7 +64,7 @@ in rec {
     hie = pkgs.hie.hies;
   };
   viAlias = alias "${vims.default}/bin/nvim" "vi";
-  videAlias = alias "${vims.vide}/bin/nvim" "vide";
-  termAlias = alias "${vims.term}/bin/nvim" "term";
+  videAlias = aliasPath "${vims.coc}/bin/nvim" "vide"
+    (with pkgs; [ haskellPackages.ghcide rustup nodejs ]);
   neovim = alias "${vims.justvim}/bin/nvim" "jvim";
 }
