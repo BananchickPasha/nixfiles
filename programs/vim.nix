@@ -76,7 +76,21 @@ in rec {
     withPython3 = true;
     configure = vimCommon // {
       customRC = vimCommon.customRC + ''
+        let g:coc_node_path = '${pkgs.nodejs}/bin/node'
         set signcolumn=yes
+        nmap <silent> gd <Plug>(coc-definition)
+        " Use K to show documentation in preview window.
+        nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+        function! s:show_documentation()
+          if (index(['vim','help'], &filetype) >= 0)
+            execute 'h '.expand('<cword>')
+          else
+            call CocAction('doHover')
+          endif
+        endfunction
+
+        autocmd CursorHold * silent call CocActionAsync('highlight')
       '';
       packages.myVimPackage.start = with pkgs.vimPlugins;
         [

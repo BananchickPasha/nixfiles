@@ -65,6 +65,6 @@ in rec {
   };
   viAlias = alias "${vims.default}/bin/nvim" "vi";
   videAlias = aliasPath "${vims.coc}/bin/nvim" "vide"
-    (with pkgs; [ haskellPackages.ghcide rustup nodejs ]);
+    (with pkgs; [ haskellPackages.ghcide rustup ]);
   neovim = alias "${vims.justvim}/bin/nvim" "jvim";
 }
