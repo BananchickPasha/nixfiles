@@ -38,12 +38,9 @@ let
     packages.myVimPackage = with pkgs.vimPlugins; {
       start = [
         gruvbox
+        vim-polyglot
         vim-nix
         nerdtree
-        ncm2
-        ncm2-path
-        ncm2-bufword
-
         fzfWrapper
         fzf-vim
 
@@ -66,8 +63,11 @@ in rec {
         set completeopt=noinsert,menuone,noselect
         autocmd BufEnter  *  call ncm2#enable_for_buffer()
       '';
-      packages.myVimPackage.start = with pkgs.vimPlugins;
-        [ vim-polyglot ] ++ defaultPackages;
+      packages.myVimPackage.start = with pkgs.vimPlugins; [
+        ncm2
+        ncm2-path
+        ncm2-bufword
+      ] ++ defaultPackages;
     };
   };
   coc = overrider {
@@ -94,10 +94,6 @@ in rec {
       '';
       packages.myVimPackage.start = with pkgs.vimPlugins;
         [
-          nerdtree
-          haskell-vim
-          vim-polyglot
-
           coc-nvim
           coc-yaml
           coc-html
